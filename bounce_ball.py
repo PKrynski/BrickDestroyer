@@ -2,6 +2,7 @@ import pygame
  
 # Define colors in RGB
 WHITE  = ( 255, 255, 255)
+BLACK  = (   0,   0,   0)
 BLUE   = (   0,   0, 255)
 RED    = ( 255,   0,   0)
  
@@ -18,6 +19,7 @@ pygame.display.set_caption("Bouncing Ball")
 exit = False
 
 # Continue the game while the user has lives
+lives = 3
 game_over = False
  
 # Used to manage how fast the screen updates
@@ -39,7 +41,7 @@ ball_change_x = 1
 ball_change_y = 1
 
  
-# --------- Main Program Loop ---------
+# --------- Main Game Loop ---------
 while exit == False:
 	for event in pygame.event.get(): # User did something
 		# print event				--> show what user did
