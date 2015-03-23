@@ -41,6 +41,12 @@ ball_rad = 8
 ball_change_x = 0
 ball_change_y = 0
 
+def ShowMessage(text, color):
+	myfont = pygame.font.Font(None, 50)
+	message = myfont.render(text, True, color)
+	
+	screen.blit(message, (100, 250))
+
 
 # --------- Main Game Loop ---------
 while exit == False:
@@ -63,6 +69,8 @@ while exit == False:
 		# Ball starting position
 		ball_x = pad_x + pad_width/2
 		ball_y = pad_y - ball_rad
+		
+		ShowMessage("Press space to launch the ball", BLACK)
 		
 		if key[pygame.K_SPACE] == True:
 			ball_change_x = 1
