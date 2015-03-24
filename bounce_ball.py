@@ -23,7 +23,6 @@ game_status = "ready"
 
 # Continue the game while the user has lives
 lives = 3
-game_over = False
  
 # Used to manage how fast the screen updates
 clock = pygame.time.Clock()
@@ -41,11 +40,11 @@ ball_rad = 8
 ball_change_x = 0
 ball_change_y = 0
 
-def ShowMessage(text, color):
-	myfont = pygame.font.Font(None, 50)
+def ShowMessage(text, color, size, position):
+	myfont = pygame.font.Font(None, size)
 	message = myfont.render(text, True, color)
 	
-	screen.blit(message, (100, 250))
+	screen.blit(message, position)
 
 
 # --------- Main Game Loop ---------
@@ -64,31 +63,35 @@ while exit == False:
 	# Keyboard input
 	key = pygame.key.get_pressed()
 
-	
+	# Ready to play
 	if game_status == "ready":
 		# Ball starting position
 		ball_x = pad_x + pad_width/2
 		ball_y = pad_y - ball_rad
 		
-		ShowMessage("Press space to launch the ball", BLACK)
+		ShowMessage("Press space to launch the ball", BLACK, 50, (100, 200))
 		
 		if key[pygame.K_SPACE] == True:
 			ball_change_x = 1
 			ball_change_y = -1
 			game_status = "playing"
 	
-
-	# Move the ball
-	ball_x += ball_change_x
-	ball_y += ball_change_y
+	# Lose a life and reset the game if the ball has gone past the paddle
 	
-	ball_left = ball_x - ball_rad
-	ball_right = ball_x + ball_rad
 	ball_top = ball_y - ball_rad
-	ball_bottom = ball_y + ball_rad
- 
-	# Move the paddle
 		
+	if game_status == "playing" and ball_top >= size[1]:
+		lives -= 1
+		
+		if lives > 0:
+			game_status = "ready"
+		else:
+			ShowMessage("GAME OVER", RED, 120, (100, 200))
+			# game_status = "game over"
+	
+	
+
+	# Move the paddle		
 	if key[pygame.K_LEFT] == True and pad_left > 0:
 		pad_x -= 2
 	elif key[pygame.K_RIGHT] == True and pad_right < size[0]:
@@ -97,16 +100,28 @@ while exit == False:
 	pad_left = pad_x
 	pad_right = pad_x + pad_width
 	
-	# Bounce the ball off the sides
-	if ball_x >= size[0] - ball_rad or ball_x <= ball_rad:
-		ball_change_x *= -1
-	if  ball_y <= ball_rad:
-		ball_change_y *= -1
 	
-	# Bounce the ball off the paddle
-	if ball_bottom == pad_y and ball_x > pad_left and ball_x < pad_right:
-		ball_change_y *= -1
-	
+	if game_status == "playing":
+		
+		# Move the ball
+		ball_x += ball_change_x
+		ball_y += ball_change_y
+		
+		ball_left = ball_x - ball_rad
+		ball_right = ball_x + ball_rad
+		ball_top = ball_y - ball_rad
+		ball_bottom = ball_y + ball_rad
+		
+		# Bounce the ball off the sides
+		if ball_x >= size[0] - ball_rad or ball_x <= ball_rad:
+			ball_change_x *= -1
+		if  ball_y <= ball_rad:
+			ball_change_y *= -1
+		
+		# Bounce the ball off the paddle
+		if ball_bottom == pad_y and ball_x > pad_left and ball_x < pad_right:
+			ball_change_y *= -1
+		
 	# Draw the ball around the center point
 	pygame.draw.circle(screen, BLUE, (ball_x, ball_y), ball_rad)
 	
@@ -115,7 +130,7 @@ while exit == False:
 	pygame.draw.rect(screen, RED, paddle)
 	
 	# Show current position of the ball and paddle
-	print "X: %d Y: %d    PAD LEFT: %d  PAD RIGHT: %d" % (ball_x, ball_y, pad_left, pad_right)
+	print "X: %d Y: %d PAD LEFT: %d PAD RIGHT: %d GAME STATUS: %s" % (ball_x, ball_y, pad_left, pad_right, game_status)
 	
 	# Limit updates to 120 frames per second
 	clock.tick(120)
