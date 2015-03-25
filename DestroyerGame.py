@@ -28,7 +28,7 @@ lives = 3
 clock = pygame.time.Clock()
  
 # Paddle starting position and dimensions
-pad_width = 68
+pad_width = 270
 pad_height = 10
 pad_x = size[0]/2 - pad_width/2
 pad_y = 460
@@ -119,18 +119,60 @@ while exit == False:
 			ball_change_y *= -1
 		
 		# Bounce the ball off the paddle
-		if ball_bottom == pad_y and ball_x > pad_left and ball_x < pad_right:
-			ball_change_y *= -1
-		
+		if ball_bottom >= pad_y and ball_bottom < pad_y + 1:
+			
+			# Vary the angle depending on where the ball hit the paddle
+			
+			# Bounce to the right
+			if ball_x >= pad_x + pad_width/2 and ball_x <= pad_x + pad_width:
+				if ball_x > pad_x + 5/6 * pad_width:
+					ball_change_x = 1.22
+					ball_change_y = -0.70
+				elif ball_x > pad_x + 4/6 * pad_width:
+					ball_change_x = 1
+					ball_change_y = -1
+				else:
+					ball_change_x = 0.70
+					ball_change_y = -1.22
+			
+			# Bounce to the left
+			if ball_x >= pad_x and ball_x <= pad_x + pad_width/2:
+				if ball_x < pad_x + 1/6 * pad_width:
+					ball_change_x = -1.22
+					ball_change_y = -0.70
+				elif ball_x < pad_x + 2/6 * pad_width:
+					ball_change_x = -1
+					ball_change_y = -1
+				else:
+					ball_change_x = -0.70
+					ball_change_y = -1.22
+
+
 	# Draw the ball around the center point
-	pygame.draw.circle(screen, BLUE, (ball_x, ball_y), ball_rad)
+	pygame.draw.circle(screen, BLUE, (int(ball_x), int(ball_y)), ball_rad)
 	
 	# Draw the paddle
 	paddle = pygame.Rect(pad_x, pad_y, pad_width, pad_height)
 	pygame.draw.rect(screen, RED, paddle)
 	
+	# Show angle
+	if ball_change_x == 0:
+		angle = 0	
+	elif ball_change_x == 1.22:
+		angle = 60
+	elif ball_change_x == -1.22:
+		angle = -60
+	elif ball_change_x == 1:
+		angle = 45
+	elif ball_change_x == -1:
+		angle = -45
+	elif ball_change_x == 0.70:
+		angle = 30
+	elif ball_change_x == -0.70:
+		angle = -30
+	
 	# Show current position of the ball and paddle
-	print "X: %d Y: %d PAD LEFT: %d PAD RIGHT: %d GAME STATUS: %s" % (ball_x, ball_y, pad_left, pad_right, game_status)
+	print "X: %d Y: %d PAD_x: %d PAD RIGHT: %d GAME STATUS: %s ANGLE: %d" % (ball_x, ball_y, pad_x, pad_right, game_status, angle)
 	
 	# Limit updates to 120 frames per second
 	clock.tick(120)
