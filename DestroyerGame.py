@@ -126,10 +126,10 @@ while exit == False:
 			
 			# Bounce to the right
 			if ball_x >= pad_x + pad_width/2 and ball_x <= pad_x + pad_width:
-				if ball_x > pad_x + 5/6 * pad_width:		# +60
+				if ball_x > pad_x + 5.0/6 * pad_width:		# +60
 					ball_change_x = 1.22
 					ball_change_y = -0.70
-				elif ball_x > pad_x + 4/6 * pad_width:		# +45
+				elif ball_x > pad_x + 4.0/6 * pad_width:	# +45
 					ball_change_x = 1
 					ball_change_y = -1
 				else:										# +30
@@ -138,10 +138,10 @@ while exit == False:
 			
 			# Bounce to the left
 			if ball_x >= pad_x and ball_x <= pad_x + pad_width/2:
-				if ball_x < pad_x + 1/6 * pad_width:		# -60
+				if ball_x < pad_x + 1.0/6 * pad_width:		# -60
 					ball_change_x = -1.22
 					ball_change_y = -0.70
-				elif ball_x < pad_x + 2/6 * pad_width:		# -45
+				elif ball_x < pad_x + 2.0/6 * pad_width:	# -45
 					ball_change_x = -1
 					ball_change_y = -1
 				else:										# -30
@@ -155,9 +155,9 @@ while exit == False:
 	# Draw the paddle
 	paddle = pygame.Rect(pad_x, pad_y, pad_width, pad_height)
 	pygame.draw.rect(screen, RED, paddle)
-	paddle2 = pygame.Rect(pad_x+60, pad_y, 0.66*pad_width, pad_height)
+	paddle2 = pygame.Rect(pad_x+1.0/6*pad_width, pad_y, 2.0/3*pad_width, pad_height)
 	pygame.draw.rect(screen, BLUE, paddle2)
-	paddle3 = pygame.Rect(pad_x+120, pad_y, 0.33*pad_width, pad_height)
+	paddle3 = pygame.Rect(pad_x+2.0/6*pad_width, pad_y, 1.0/3*pad_width, pad_height)
 	pygame.draw.rect(screen, GRAY, paddle3)
 	
 	# Show angle
