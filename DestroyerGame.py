@@ -1,3 +1,4 @@
+from random import randint
 import pygame
  
 # Define colors in RGB
@@ -21,6 +22,33 @@ def ShowMessage(text, color, size, position):
 	
 	screen.blit(message, position)
 
+def generate_colors():
+	colors = []
+	for i in range(0, 300):
+		colors.append(randint(0, 255))
+	return colors
+
+def create_bricks():
+	y_ofs = 35
+	bricks = []
+	for i in range(7):
+		x_ofs = 35
+		for j in range(8):
+			bricks.append(pygame.Rect(x_ofs,y_ofs, 70,20))
+			x_ofs += 70 + 10
+		y_ofs += 20 + 5
+	return bricks
+
+def draw_bricks(screen, bricks, colors):
+	a = 0
+	b = 1
+	c = 2	
+	for brick in bricks:
+		pygame.draw.rect(screen, (colors[a], colors[b], colors[c]), brick)
+		a += 3
+		b += 3
+		c += 3
+
 
 def RunGame():	
 	
@@ -32,10 +60,14 @@ def RunGame():
 
 	# Continue the game while the user has lives
 	lives = 1
-	 
+
+	# Generate random colors array:
+	colors = generate_colors()
+	print colors
+
 	# Used to manage how fast the screen updates
 	clock = pygame.time.Clock()
-	 
+	
 	# Paddle starting position and dimensions
 	pad_width = 68
 	pad_height = 10
@@ -48,6 +80,9 @@ def RunGame():
 	# Speed and direction of the ball
 	ball_change_x = 0
 	ball_change_y = 0
+	
+	# Create bricks
+	bricks = create_bricks()
 	
 	# --------- Main Game Loop ---------
 	while exit == False:
@@ -89,17 +124,17 @@ def RunGame():
 			ball_x = pad_x + pad_width/2
 			ball_y = pad_y - ball_rad
 			
-			ShowMessage("Press space to launch the ball", BLACK, 50, (100, 200))
+			ShowMessage("Press space to launch the ball", BLACK, 50, (100, 250))
 			
 			if key[pygame.K_SPACE] == True:
 				ball_change_x = 1
 				ball_change_y = -1
 				game_status = "playing"
 		
-		# Lose a life and reset the game if the ball has gone past the paddle
 		
+		# Lose a life and reset the game if the ball has gone past the paddle
 		ball_top = ball_y - ball_rad
-			
+
 		if game_status == "playing" and ball_top >= size[1]:
 			lives -= 1
 			
@@ -109,17 +144,21 @@ def RunGame():
 				game_status = "game over"
 		
 		
+		# Draw the bricks
+		draw_bricks(screen, bricks, colors)
+		
+		
 		# Move the paddle
 		pad_left = pad_x
 		pad_right = pad_x + pad_width
-				
+
 		if key[pygame.K_LEFT] == True and pad_left > 0:
 			pad_x -= 2
 		elif key[pygame.K_RIGHT] == True and pad_right < size[0]:
 			pad_x += 2
-		
 
-		
+
+
 		if game_status == "playing":
 			
 			# Move the ball
@@ -136,7 +175,7 @@ def RunGame():
 				ball_change_x *= -1
 			if  ball_y <= ball_rad:
 				ball_change_y *= -1
-			
+
 			# Bounce the ball off the paddle
 			if ball_bottom == pad_y and ball_x > pad_left and ball_x < pad_right:
 				ball_change_y *= -1
@@ -149,14 +188,14 @@ def RunGame():
 		pygame.draw.rect(screen, RED, paddle)
 		
 		# Show current position of the ball and paddle
-		print "X: %d Y: %d PAD LEFT: %d PAD RIGHT: %d GAME STATUS: %s" % (ball_x, ball_y, pad_left, pad_right, game_status)
+		#print "X: %d Y: %d PAD LEFT: %d PAD RIGHT: %d GAME STATUS: %s" % (ball_x, ball_y, pad_left, pad_right, game_status)
 		
 		# Limit updates to 120 frames per second
 		clock.tick(120)
 	 
 		# Update the entire area of the display to the screen 
 		pygame.display.update()
-		 
+
 	pygame.quit()
 
 RunGame()
