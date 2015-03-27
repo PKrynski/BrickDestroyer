@@ -83,8 +83,8 @@ def RunGame():
 	
 	# Create bricks
 	bricks = create_bricks()
-	bricks.remove((360,98,70,20))		# for testing
-	del(bricks[22])						# for testing
+	bricks.remove((360,98,70,20))		# for testing - removes passed item if found
+	del(bricks[22])						# for testing - removes item at index 22
 	print bricks						# for testing
 	
 	# --------- Main Game Loop ---------
