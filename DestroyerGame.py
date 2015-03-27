@@ -6,6 +6,7 @@ WHITE  = ( 255, 255, 255)
 BLACK  = (   0,   0,   0)
 BLUE   = (   0,   0, 255)
 RED    = ( 255,   0,   0)
+GRAY   = ( 200, 200, 200)
  
 pygame.init()
   
@@ -25,18 +26,18 @@ def ShowMessage(text, color, size, position):
 def generate_colors():
 	colors = []
 	for i in range(0, 300):
-		colors.append(randint(0, 255))
+		colors.append(randint(0, 200))
 	return colors
 
 def create_bricks():
 	y_ofs = 35
 	bricks = []
 	for i in range(7):
-		x_ofs = 35
-		for j in range(8):
+		x_ofs = 5
+		for j in range(10):
 			bricks.append(pygame.Rect(x_ofs,y_ofs, 70,20))
-			x_ofs += 70 + 10
-		y_ofs += 20 + 5
+			x_ofs += 70 + 1
+		y_ofs += 20 + 1
 	return bricks
 
 def draw_bricks(screen, bricks, colors):
@@ -63,7 +64,6 @@ def RunGame():
 
 	# Generate random colors array:
 	colors = generate_colors()
-	print colors
 
 	# Used to manage how fast the screen updates
 	clock = pygame.time.Clock()
@@ -83,6 +83,9 @@ def RunGame():
 	
 	# Create bricks
 	bricks = create_bricks()
+	bricks.remove((360,98,70,20))		# for testing
+	del(bricks[22])						# for testing
+	print bricks						# for testing
 	
 	# --------- Main Game Loop ---------
 	while exit == False:
@@ -92,9 +95,13 @@ def RunGame():
 				exit = True # Flag that we want to exit this loop
 	 
 		while game_status == "game over":
+			
+			screen.fill(BLACK)
+			
 			ShowMessage("GAME OVER", RED, 120, (120, 140))
-			ShowMessage("Press Enter to play again", BLACK, 36, (210, 290))
-			ShowMessage("Press Escape to quit", BLACK, 36, (240, 330))
+			ShowMessage("Press Enter to play again", GRAY, 36, (210, 290))
+			ShowMessage("Press Escape to quit", GRAY, 36, (240, 330))
+			
 			pygame.display.update()
 			
 			for event in pygame.event.get():
