@@ -40,16 +40,35 @@ def create_bricks():
 		y_ofs += 20 + 1
 	return bricks
 
+def remove_bricks(ball_x, ball_y, bricks, colors):
+	if ball_y == 200:
+		bricks[25] = None
+	
+
 def draw_bricks(screen, bricks, colors):
 	a = 0
 	b = 1
 	c = 2	
 	for brick in bricks:
-		pygame.draw.rect(screen, (colors[a], colors[b], colors[c]), brick)
-		a += 3
-		b += 3
-		c += 3
+		if brick == None:
+			colors[a] = None
+			colors[b] = None
+			colors[c] = None
+		else:
+			if colors[a] == None:
+				a += 3
+				b += 3
+				c += 3
+				
+			pygame.draw.rect(screen, (colors[a], colors[b], colors[c]), brick)
+			a += 3
+			b += 3
+			c += 3
 
+
+def check_hit(bricks): # --------------------------------------------------
+	for brick in bricks:
+		print brick
 
 def RunGame():	
 	
@@ -83,9 +102,11 @@ def RunGame():
 	
 	# Create bricks
 	bricks = create_bricks()
-	bricks.remove((360,98,70,20))		# for testing - removes passed item if found
+	# bricks.remove((360,98,70,20))		# for testing - removes passed item if found
 	del(bricks[22])						# for testing - removes item at index 22
-	print bricks						# for testing
+	#print bricks						# for testing
+	check_hit(bricks)
+	
 	
 	# --------- Main Game Loop ---------
 	while exit == False:
@@ -151,10 +172,6 @@ def RunGame():
 				game_status = "game over"
 		
 		
-		# Draw the bricks
-		draw_bricks(screen, bricks, colors)
-		
-		
 		# Move the paddle
 		pad_left = pad_x
 		pad_right = pad_x + pad_width
@@ -183,12 +200,49 @@ def RunGame():
 			if  ball_y <= ball_rad:
 				ball_change_y *= -1
 
-			# Bounce the ball off the paddle
-			if ball_bottom == pad_y and ball_x > pad_left and ball_x < pad_right:
-				ball_change_y *= -1
 			
+			# Bounce the ball off the paddle
+			if ball_bottom >= pad_y and ball_bottom < pad_y + 1:
+				
+				# Vary the angle depending on where the ball hit the paddle
+				
+				# Bounce to the right
+				if ball_x >= pad_x + pad_width/2 and ball_x <= pad_x + pad_width:
+					if ball_x > pad_x + 5.0/6 * pad_width:		# +60
+						ball_change_x = 1.22
+						ball_change_y = -0.70
+					elif ball_x > pad_x + 4.0/6 * pad_width:	# +45
+						ball_change_x = 1
+						ball_change_y = -1
+					else:										# +30
+						ball_change_x = 0.70
+						ball_change_y = -1.22
+				
+				# Bounce to the left
+				if ball_x >= pad_x and ball_x <= pad_x + pad_width/2:
+					if ball_x < pad_x + 1.0/6 * pad_width:		# -60
+						ball_change_x = -1.22
+						ball_change_y = -0.70
+					elif ball_x < pad_x + 2.0/6 * pad_width:	# -45
+						ball_change_x = -1
+						ball_change_y = -1
+					else:										# -30
+						ball_change_x = -0.70
+						ball_change_y = -1.22
+
+
+			# Check if any bricks have been hit ----------------------------------------------------------
+			# check_hit(bricks)
+			
+			
+		# Remove bricks if hit
+		remove_bricks(ball_x, ball_y, bricks, colors)
+		
+		# Draw the bricks
+		draw_bricks(screen, bricks, colors)
+		
 		# Draw the ball around the center point
-		pygame.draw.circle(screen, BLUE, (ball_x, ball_y), ball_rad)
+		pygame.draw.circle(screen, BLUE, (int(ball_x), int(ball_y)), ball_rad)
 		
 		# Draw the paddle
 		paddle = pygame.Rect(pad_x, pad_y, pad_width, pad_height)
