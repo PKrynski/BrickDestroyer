@@ -26,7 +26,7 @@ def ShowMessage(text, color, size, position):
 def generate_colors():
 	colors = []
 	for i in range(0, 300):
-		colors.append(randint(0, 200))
+		colors.append(randint(0, 255))
 	return colors
 
 def create_bricks():
@@ -138,7 +138,7 @@ def RunGame():
 
 		
 		# Set the screen background color
-		screen.fill(WHITE)
+		screen.fill(BLACK)
 		
 		# Hide mouse pointer
 		pygame.mouse.set_visible(0)
@@ -200,37 +200,10 @@ def RunGame():
 			if  ball_y <= ball_rad:
 				ball_change_y *= -1
 
-			
 			# Bounce the ball off the paddle
-			if ball_bottom >= pad_y and ball_bottom < pad_y + 1:
-				
-				# Vary the angle depending on where the ball hit the paddle
-				
-				# Bounce to the right
-				if ball_x >= pad_x + pad_width/2 and ball_x <= pad_x + pad_width:
-					if ball_x > pad_x + 5.0/6 * pad_width:		# +60
-						ball_change_x = 1.22
-						ball_change_y = -0.70
-					elif ball_x > pad_x + 4.0/6 * pad_width:	# +45
-						ball_change_x = 1
-						ball_change_y = -1
-					else:										# +30
-						ball_change_x = 0.70
-						ball_change_y = -1.22
-				
-				# Bounce to the left
-				if ball_x >= pad_x and ball_x <= pad_x + pad_width/2:
-					if ball_x < pad_x + 1.0/6 * pad_width:		# -60
-						ball_change_x = -1.22
-						ball_change_y = -0.70
-					elif ball_x < pad_x + 2.0/6 * pad_width:	# -45
-						ball_change_x = -1
-						ball_change_y = -1
-					else:										# -30
-						ball_change_x = -0.70
-						ball_change_y = -1.22
-
-
+			if ball_bottom == pad_y and ball_x > pad_left and ball_x < pad_right:
+				ball_change_y *= -1
+			
 			# Check if any bricks have been hit ----------------------------------------------------------
 			# check_hit(bricks)
 			
@@ -242,7 +215,7 @@ def RunGame():
 		draw_bricks(screen, bricks, colors)
 		
 		# Draw the ball around the center point
-		pygame.draw.circle(screen, BLUE, (int(ball_x), int(ball_y)), ball_rad)
+		pygame.draw.circle(screen, BLUE, (ball_x, ball_y), ball_rad)
 		
 		# Draw the paddle
 		paddle = pygame.Rect(pad_x, pad_y, pad_width, pad_height)
