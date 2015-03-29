@@ -26,7 +26,7 @@ def ShowMessage(text, color, size, position):
 def generate_colors():
 	colors = []
 	for i in range(0, 300):
-		colors.append(randint(0, 255))
+		colors.append(randint(0, 200))
 	return colors
 
 def create_bricks():
@@ -43,7 +43,11 @@ def create_bricks():
 def remove_bricks(ball_x, ball_y, bricks, colors):
 	if ball_y == 200:
 		bricks[25] = None
-	
+		
+		# Check if brick still exists
+		if (360,98,70,20) in bricks == True:
+			i = bricks.index((360,98,70,20))
+			bricks[i] = None
 
 def draw_bricks(screen, bricks, colors):
 	a = 0
@@ -75,7 +79,7 @@ def RunGame():
 	# Run the game until the user clicks the close button
 	exit = False
 
-	# Game status
+	# Initial game status
 	game_status = "ready"
 
 	# Continue the game while the user has lives
@@ -138,7 +142,7 @@ def RunGame():
 
 		
 		# Set the screen background color
-		screen.fill(BLACK)
+		screen.fill(WHITE)
 		
 		# Hide mouse pointer
 		pygame.mouse.set_visible(0)
@@ -182,7 +186,7 @@ def RunGame():
 			pad_x += 2
 
 
-
+		# Playing
 		if game_status == "playing":
 			
 			# Move the ball
@@ -200,12 +204,39 @@ def RunGame():
 			if  ball_y <= ball_rad:
 				ball_change_y *= -1
 
-			# Bounce the ball off the paddle
-			if ball_bottom == pad_y and ball_x > pad_left and ball_x < pad_right:
-				ball_change_y *= -1
 			
+			# Bounce the ball off the paddle
+			if ball_bottom >= pad_y and ball_bottom < pad_y + 1:
+				
+				# Vary the angle depending on where the ball hit the paddle
+				
+				# Bounce to the right
+				if ball_x >= pad_x + pad_width/2 and ball_x <= pad_x + pad_width:
+					if ball_x > pad_x + 5.0/6 * pad_width:		# +60
+						ball_change_x = 1.22
+						ball_change_y = -0.70
+					elif ball_x > pad_x + 4.0/6 * pad_width:	# +45
+						ball_change_x = 1
+						ball_change_y = -1
+					else:										# +30
+						ball_change_x = 0.70
+						ball_change_y = -1.22
+				
+				# Bounce to the left
+				if ball_x >= pad_x and ball_x <= pad_x + pad_width/2:
+					if ball_x < pad_x + 1.0/6 * pad_width:		# -60
+						ball_change_x = -1.22
+						ball_change_y = -0.70
+					elif ball_x < pad_x + 2.0/6 * pad_width:	# -45
+						ball_change_x = -1
+						ball_change_y = -1
+					else:										# -30
+						ball_change_x = -0.70
+						ball_change_y = -1.22
+
+
 			# Check if any bricks have been hit ----------------------------------------------------------
-			# check_hit(bricks)
+			#check_hit(bricks)
 			
 			
 		# Remove bricks if hit
@@ -215,7 +246,7 @@ def RunGame():
 		draw_bricks(screen, bricks, colors)
 		
 		# Draw the ball around the center point
-		pygame.draw.circle(screen, BLUE, (ball_x, ball_y), ball_rad)
+		pygame.draw.circle(screen, BLUE, (int(ball_x), int(ball_y)), ball_rad)
 		
 		# Draw the paddle
 		paddle = pygame.Rect(pad_x, pad_y, pad_width, pad_height)
