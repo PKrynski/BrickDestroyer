@@ -23,13 +23,24 @@ def ShowMessage(text, color, size, position):
 	
 	screen.blit(message, position)
 
+def MovePaddle(pad_x, pad_width, key):
+	pad_left = pad_x
+	pad_right = pad_x + pad_width
+
+	if key[pygame.K_LEFT] == True and pad_left > 0:
+		pad_x -= 2
+	elif key[pygame.K_RIGHT] == True and pad_right < size[0]:
+		pad_x += 2
+	
+	return pad_x
+
 def generate_colors():
 	colors = []
 	for i in range(0, 300):
 		colors.append(randint(0, 200))
 	return colors
 
-def create_bricks():
+def CreateBricks():
 	y_ofs = 35
 	bricks = []
 	for i in range(7):
@@ -49,7 +60,7 @@ def remove_bricks(ball_x, ball_y, bricks, colors):
 			i = bricks.index((360,98,70,20))
 			bricks[i] = None
 
-def draw_bricks(screen, bricks, colors):
+def DrawBricks(screen, bricks, colors):
 	a = 0
 	b = 1
 	c = 2	
@@ -105,7 +116,7 @@ def RunGame():
 	ball_change_y = 0
 	
 	# Create bricks
-	bricks = create_bricks()
+	bricks = CreateBricks()
 	# bricks.remove((360,98,70,20))		# for testing - removes passed item if found
 	del(bricks[22])						# for testing - removes item at index 22
 	#print bricks						# for testing
@@ -148,7 +159,7 @@ def RunGame():
 		pygame.mouse.set_visible(0)
 		
 		# Keyboard input
-		key = pygame.key.get_pressed()
+		pressed_key = pygame.key.get_pressed()
 		
 		# Ready to play
 		if game_status == "ready":
@@ -158,7 +169,7 @@ def RunGame():
 			
 			ShowMessage("Press space to launch the ball", BLACK, 50, (100, 250))
 			
-			if key[pygame.K_SPACE] == True:
+			if pressed_key[pygame.K_SPACE] == True:
 				ball_change_x = 1
 				ball_change_y = -1
 				game_status = "playing"
@@ -177,14 +188,7 @@ def RunGame():
 		
 		
 		# Move the paddle
-		pad_left = pad_x
-		pad_right = pad_x + pad_width
-
-		if key[pygame.K_LEFT] == True and pad_left > 0:
-			pad_x -= 2
-		elif key[pygame.K_RIGHT] == True and pad_right < size[0]:
-			pad_x += 2
-
+		pad_x = MovePaddle(pad_x, pad_width, pressed_key)
 
 		# Playing
 		if game_status == "playing":
@@ -243,7 +247,7 @@ def RunGame():
 		remove_bricks(ball_x, ball_y, bricks, colors)
 		
 		# Draw the bricks
-		draw_bricks(screen, bricks, colors)
+		DrawBricks(screen, bricks, colors)
 		
 		# Draw the ball around the center point
 		pygame.draw.circle(screen, BLUE, (int(ball_x), int(ball_y)), ball_rad)
