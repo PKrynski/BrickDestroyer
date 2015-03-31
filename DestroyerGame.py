@@ -46,7 +46,7 @@ def CreateBricks():
 	for i in range(7):
 		x_ofs = 5
 		for j in range(10):
-			bricks.append(pygame.Rect(x_ofs,y_ofs, 70,20))
+			bricks.append([x_ofs, y_ofs, 70, 20])
 			x_ofs += 70 + 1
 		y_ofs += 20 + 1
 	return bricks
@@ -65,7 +65,8 @@ def DrawBricks(screen, bricks, colors):
 				a += 3
 				b += 3
 				c += 3
-				
+			
+			oneBrick = pygame.Rect(brick)
 			pygame.draw.rect(screen, (colors[a], colors[b], colors[c]), brick)
 			a += 3
 			b += 3
@@ -77,15 +78,19 @@ def remove_bricks(ball_x, ball_y, bricks):
 		#bricks[25] = None
 		
 		# Check if brick still exists
-		#if (360,98,70,20) in bricks == True:	#-------- Could make another list 
-		print "DETECTED"
-		i = bricks.index((360,98,70,20))
-		bricks[i] = None
+		#if ([360, 98, 70, 20]) in bricks == True:	#-------- Could make another list 
+		print "DETECTED - REMOVED"
+		print bricks[25][0]
+		try:
+			i = bricks.index([360,98,70,20])
+			bricks[i] = None
+		except ValueError:
+			pass
 	
 	return bricks
 
 
-def check_hit(bricks): #--------------------------------------------------
+def show_list(bricks): #--------------------------------------------------
 	for brick in bricks:
 		print brick
 
@@ -121,10 +126,10 @@ def RunGame():
 	
 	# Create bricks
 	bricks = CreateBricks()
-	# bricks.remove((360,98,70,20))		# for testing - removes passed item if found
+	#bricks.remove([360, 98, 70, 20])	# for testing - removes passed item if found
 	#del(bricks[22])					# for testing - removes item at index 22
 	#print bricks						# for testing
-	check_hit(bricks)
+	show_list(bricks)
 	
 	
 	# --------- Main Game Loop ---------
