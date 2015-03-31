@@ -51,15 +51,6 @@ def CreateBricks():
 		y_ofs += 20 + 1
 	return bricks
 
-def remove_bricks(ball_x, ball_y, bricks, colors):
-	if ball_y == 200:
-		bricks[25] = None
-		
-		# Check if brick still exists
-		if (360,98,70,20) in bricks == True:
-			i = bricks.index((360,98,70,20))
-			bricks[i] = None
-
 def DrawBricks(screen, bricks, colors):
 	a = 0
 	b = 1
@@ -80,8 +71,21 @@ def DrawBricks(screen, bricks, colors):
 			b += 3
 			c += 3
 
+def remove_bricks(ball_x, ball_y, bricks):
+	
+	if ball_y == 200:
+		#bricks[25] = None
+		
+		# Check if brick still exists
+		#if (360,98,70,20) in bricks == True:	#-------- Could make another list 
+		print "DETECTED"
+		i = bricks.index((360,98,70,20))
+		bricks[i] = None
+	
+	return bricks
 
-def check_hit(bricks): # --------------------------------------------------
+
+def check_hit(bricks): #--------------------------------------------------
 	for brick in bricks:
 		print brick
 
@@ -90,13 +94,13 @@ def RunGame():
 	# Run the game until the user clicks the close button
 	exit = False
 
-	# Initial game status
+	# Game status
 	game_status = "ready"
 
 	# Continue the game while the user has lives
 	lives = 1
 
-	# Generate random colors array:
+	# Generate random color values list:
 	colors = generate_colors()
 
 	# Used to manage how fast the screen updates
@@ -118,7 +122,7 @@ def RunGame():
 	# Create bricks
 	bricks = CreateBricks()
 	# bricks.remove((360,98,70,20))		# for testing - removes passed item if found
-	del(bricks[22])						# for testing - removes item at index 22
+	#del(bricks[22])					# for testing - removes item at index 22
 	#print bricks						# for testing
 	check_hit(bricks)
 	
@@ -244,7 +248,7 @@ def RunGame():
 			
 			
 		# Remove bricks if hit
-		remove_bricks(ball_x, ball_y, bricks, colors)
+		bricks = remove_bricks(ball_x, ball_y, bricks) #------------------------
 		
 		# Draw the bricks
 		DrawBricks(screen, bricks, colors)
