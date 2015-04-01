@@ -72,20 +72,30 @@ def DrawBricks(screen, bricks, colors):
 			b += 3
 			c += 3
 
-def remove_bricks(ball_x, ball_y, bricks):
+def remove_bricks(ball_x, ball_y, ball_rad, bricks):
 	
-	if ball_y == 200:
+	ball_top = ball_y - ball_rad
+	ball_bottom = ball_y + ball_rad
+	
+	for brick in bricks:
+		if ball_top == 200:
+			try:			
+				i = bricks.index(brick)
+				bricks[i] = None
+			except ValueError:
+				pass
+	
+	#if ball_y == 200:
 		#bricks[25] = None
 		
 		# Check if brick still exists
-		#if ([360, 98, 70, 20]) in bricks == True:	#-------- Could make another list 
-		print "DETECTED - REMOVED"
-		print bricks[25][0]
-		try:
-			i = bricks.index([360,98,70,20])
-			bricks[i] = None
-		except ValueError:
-			pass
+	#	print "DETECTED - REMOVED"
+	#	print bricks[25][0]
+	#	try:
+	#		i = bricks.index([360,98,70,20])
+	#		bricks[i] = None
+	#	except ValueError:
+	#		pass
 	
 	return bricks
 
@@ -253,7 +263,7 @@ def RunGame():
 			
 			
 		# Remove bricks if hit
-		bricks = remove_bricks(ball_x, ball_y, bricks) #------------------------
+		bricks = remove_bricks(ball_x, ball_y, ball_rad, bricks) #------------------------
 		
 		# Draw the bricks
 		DrawBricks(screen, bricks, colors)
