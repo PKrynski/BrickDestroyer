@@ -83,7 +83,7 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 				brick_left = brick[0]
 				brick_right = brick[0] + 70
 				
-				if ball_top == brick[1] + 20:
+				if int(ball_top) == brick[1] + 20:
 					if ball_x >= brick_left and ball_x <= brick_right:
 						
 						ball_change_y *= -1
