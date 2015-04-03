@@ -47,8 +47,8 @@ def CreateBricks():
 		x_ofs = 5
 		for j in range(10):
 			bricks.append([x_ofs, y_ofs, 70, 20])
-			x_ofs += 70 + 1
-		y_ofs += 20 + 1
+			x_ofs += 70
+		y_ofs += 20
 	return bricks
 
 def DrawBricks(screen, bricks, colors):
