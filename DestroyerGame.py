@@ -47,8 +47,8 @@ def CreateBricks():
 		x_ofs = 5
 		for j in range(10):
 			bricks.append([x_ofs, y_ofs, 70, 20])
-			x_ofs += 70
-		y_ofs += 20
+			x_ofs += 70 + 1
+		y_ofs += 20 + 1
 	return bricks
 
 def DrawBricks(screen, bricks, colors):
@@ -58,14 +58,12 @@ def DrawBricks(screen, bricks, colors):
 	for brick in bricks:
 		if brick == None:
 			colors[a] = None
+			a += 3
 			colors[b] = None
+			b += 3
 			colors[c] = None
+			c += 3
 		else:
-			if colors[a] == None:
-				a += 3
-				b += 3
-				c += 3
-			
 			oneBrick = pygame.Rect(brick)
 			pygame.draw.rect(screen, (colors[a], colors[b], colors[c]), brick)
 			a += 3
@@ -83,7 +81,14 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 				brick_left = brick[0]
 				brick_right = brick[0] + 70
 				
-				if int(ball_top) == brick[1] + 20:
+				if int(ball_top) <= brick[1] + 20 and int(ball_top) >= brick[1] + 19:
+					if ball_x >= brick_left and ball_x <= brick_right:
+						
+						ball_change_y *= -1
+						i = bricks.index(brick)
+						bricks[i] = None
+				
+				if int(ball_bottom) >= brick[1] and int(ball_bottom) <= brick[1] + 1:
 					if ball_x >= brick_left and ball_x <= brick_right:
 						
 						ball_change_y *= -1
