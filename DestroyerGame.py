@@ -110,6 +110,14 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 						ball_change_x *= -1
 						i = bricks.index(brick)
 						bricks[i] = None
+						
+				# Hit from the left
+				if int(ball_right) >= brick[0] and int(ball_right) <= brick[0] + 1:
+					if ball_y >= brick_top and ball_y <= brick_bottom:
+						
+						ball_change_x *= -1
+						i = bricks.index(brick)
+						bricks[i] = None
 
 		except ValueError:
 			pass
