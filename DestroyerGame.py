@@ -75,12 +75,19 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 	ball_top = ball_y - ball_rad
 	ball_bottom = ball_y + ball_rad
 	
+	ball_left = ball_x - ball_rad
+	ball_right = ball_x + ball_rad
+	
 	for brick in bricks:
 		try:
 			if brick !=  None:
 				brick_left = brick[0]
 				brick_right = brick[0] + 70
 				
+				brick_top = brick[1]
+				brick_bottom = brick[1] + 20
+				
+				# Hit from below
 				if int(ball_top) <= brick[1] + 20 and int(ball_top) >= brick[1] + 19:
 					if ball_x >= brick_left and ball_x <= brick_right:
 						
@@ -88,6 +95,7 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 						i = bricks.index(brick)
 						bricks[i] = None
 				
+				# Hit from above
 				if int(ball_bottom) >= brick[1] and int(ball_bottom) <= brick[1] + 1:
 					if ball_x >= brick_left and ball_x <= brick_right:
 						
@@ -95,10 +103,16 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 						i = bricks.index(brick)
 						bricks[i] = None
 
+				# Hit from the right
+				if int(ball_left) <= brick[0] + 70 and int(ball_left) >= brick[0] + 69:
+					if ball_y >= brick_top and ball_y <= brick_bottom:
+						
+						ball_change_x *= -1
+						i = bricks.index(brick)
+						bricks[i] = None
+
 		except ValueError:
 			pass
-
-	
 
 	return (bricks, ball_change_x, ball_change_y)
 
@@ -116,7 +130,7 @@ def RunGame():
 	game_status = "ready"
 
 	# Continue the game while the user has lives
-	lives = 1
+	lives = 3
 
 	# Generate random color values list:
 	colors = generate_colors()
