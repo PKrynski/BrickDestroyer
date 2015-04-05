@@ -43,12 +43,12 @@ def generate_colors():
 def CreateBricks():
 	y_ofs = 35
 	bricks = []
-	for i in range(7):
+	for i in range(2):
 		x_ofs = 5
-		for j in range(10):
-			bricks.append([x_ofs, y_ofs, 70, 20])
-			x_ofs += 70 + 1
-		y_ofs += 20 + 1
+		for j in range(3):
+			bricks.append([x_ofs, y_ofs, 200, 80])
+			x_ofs += 200 + 1
+		y_ofs += 80 + 1
 	return bricks
 
 def DrawBricks(screen, bricks, colors):
@@ -82,13 +82,13 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 		try:
 			if brick !=  None:
 				brick_left = brick[0]
-				brick_right = brick[0] + 70
+				brick_right = brick[0] + 200
 				
 				brick_top = brick[1]
-				brick_bottom = brick[1] + 20
+				brick_bottom = brick[1] + 80
 				
 				# Hit from below
-				if int(ball_top) <= brick[1] + 20 and int(ball_top) >= brick[1] + 19:
+				if int(ball_top) <= brick[1] + 80 and int(ball_top) >= brick[1] + 79:
 					if ball_x >= brick_left and ball_x <= brick_right:
 						
 						ball_change_y *= -1
@@ -104,7 +104,7 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 						bricks[i] = None
 
 				# Hit from the right
-				if int(ball_left) <= brick[0] + 70 and int(ball_left) >= brick[0] + 69:
+				if int(ball_left) <= brick[0] + 200 and int(ball_left) >= brick[0] + 199:
 					if ball_y >= brick_top and ball_y <= brick_bottom:
 						
 						ball_change_x *= -1
@@ -163,22 +163,6 @@ def RunGame():
 	bricks = CreateBricks()
 
 	show_list(bricks) # ---------------------------
-	
-	# test -------------------------------------------------------------------------------
-	bricks[0] = None
-	bricks[9] = None
-	bricks[10] = None
-	bricks[19] = None
-	bricks[20] = None
-	bricks[29] = None
-	bricks[30] = None
-	bricks[39] = None
-	bricks[40] = None
-	bricks[49] = None
-	bricks[50] = None
-	bricks[59] = None
-	bricks[60] = None
-	bricks[69] = None
 	
 	
 	# --------- Main Game Loop ---------
