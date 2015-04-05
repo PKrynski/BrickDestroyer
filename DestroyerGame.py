@@ -164,6 +164,22 @@ def RunGame():
 
 	show_list(bricks) # ---------------------------
 	
+	# test -------------------------------------------------------------------------------
+	bricks[0] = None
+	bricks[9] = None
+	bricks[10] = None
+	bricks[19] = None
+	bricks[20] = None
+	bricks[29] = None
+	bricks[30] = None
+	bricks[39] = None
+	bricks[40] = None
+	bricks[49] = None
+	bricks[50] = None
+	bricks[59] = None
+	bricks[60] = None
+	bricks[69] = None
+	
 	
 	# --------- Main Game Loop ---------
 	while exit == False:
