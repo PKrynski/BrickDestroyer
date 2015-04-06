@@ -15,7 +15,7 @@ size = [720, 480]
 screen = pygame.display.set_mode(size)
 
 # Set the game window name
-pygame.display.set_caption("Bouncing Ball")
+pygame.display.set_caption("Destroy all bricks!")
  
 def ShowMessage(text, color, size, position):
 	myfont = pygame.font.Font("AGENCYB.ttf", size)
@@ -34,7 +34,7 @@ def MovePaddle(pad_x, pad_width, key):
 	
 	return pad_x
 
-def generate_colors():
+def GenerateColors():
 	colors = []
 	for i in range(0, 300):
 		colors.append(randint(0, 200))
@@ -97,15 +97,15 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 				
 				# Hit from above
 				if int(ball_bottom) >= brick[1] and int(ball_bottom) <= brick[1] + 1:
-					if ball_x >= brick_left and ball_x <= brick_right + 1:
+					if ball_x >= brick_left and ball_x <= brick_right:
 						
 						ball_change_y *= -1
 						i = bricks.index(brick)
 						bricks[i] = None
 
 				# Hit from the right
-				if int(ball_left) <= brick[0] + 71 and int(ball_left) >= brick[0] + 69:
-					if ball_y >= brick_top and ball_y <= brick_bottom + 1:
+				if int(ball_left) <= brick[0] + 70 and int(ball_left) >= brick[0] + 69:
+					if ball_y >= brick_top and ball_y <= brick_bottom:
 						
 						ball_change_x *= -1
 						i = bricks.index(brick)
@@ -141,7 +141,7 @@ def RunGame():
 	lives = 3
 
 	# Generate random color values list:
-	colors = generate_colors()
+	colors = GenerateColors()
 
 	# Used to manage how fast the screen updates
 	clock = pygame.time.Clock()
@@ -163,22 +163,6 @@ def RunGame():
 	bricks = CreateBricks()
 
 	show_list(bricks) # ---------------------------
-	
-	# test -------------------------------------------------------------------------------
-	bricks[0] = None
-	bricks[9] = None
-	bricks[10] = None
-	bricks[19] = None
-	bricks[20] = None
-	bricks[29] = None
-	bricks[30] = None
-	bricks[39] = None
-	bricks[40] = None
-	bricks[49] = None
-	bricks[50] = None
-	bricks[59] = None
-	bricks[60] = None
-	bricks[69] = None
 	
 	
 	# --------- Main Game Loop ---------
