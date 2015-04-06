@@ -89,7 +89,7 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 				
 				# Hit from below
 				if int(ball_top) <= brick[1] + 20 and int(ball_top) >= brick[1] + 19:
-					if ball_x >= brick_left and ball_x - ball_rad <= brick_right:
+					if ball_x >= brick_left and ball_x <= brick_right:
 						
 						ball_change_y *= -1
 						i = bricks.index(brick)
@@ -97,7 +97,7 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 				
 				# Hit from above
 				if int(ball_bottom) >= brick[1] and int(ball_bottom) <= brick[1] + 1:
-					if ball_x >= brick_left and ball_x + ball_rad <= brick_right + 1:
+					if ball_x >= brick_left and ball_x <= brick_right + 1:
 						
 						ball_change_y *= -1
 						i = bricks.index(brick)
@@ -105,7 +105,7 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 
 				# Hit from the right
 				if int(ball_left) <= brick[0] + 71 and int(ball_left) >= brick[0] + 69:
-					if ball_y >= brick_top and ball_y - ball_rad <= brick_bottom + 1:
+					if ball_y >= brick_top and ball_y <= brick_bottom + 1:
 						
 						ball_change_x *= -1
 						i = bricks.index(brick)
@@ -113,7 +113,7 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 						
 				# Hit from the left
 				if int(ball_right) >= brick[0] and int(ball_right) <= brick[0] + 1:
-					if ball_y >= brick_top and ball_y + ball_rad <= brick_bottom:
+					if ball_y >= brick_top and ball_y <= brick_bottom:
 						
 						ball_change_x *= -1
 						i = bricks.index(brick)
@@ -179,12 +179,6 @@ def RunGame():
 	bricks[59] = None
 	bricks[60] = None
 	bricks[69] = None
-	
-	print
-	print "brick top: %d" % bricks[58][1]
-	print "brick bottom: %d" % (bricks[58][1] + 20)
-	print "brick left: %d" % bricks[58][0]
-	print "brick right: %d" % (bricks[58][0] + 70)
 	
 	
 	# --------- Main Game Loop ---------
@@ -314,14 +308,14 @@ def RunGame():
 		DrawBricks(screen, bricks, colors)
 		
 		# Draw the ball around the center point
-		pygame.draw.rect(screen, BLUE, [int(ball_x)-8, int(ball_y)-8, 16, 16])
+		pygame.draw.circle(screen, BLUE, (int(ball_x), int(ball_y)), ball_rad)
 		
 		# Draw the paddle
 		paddle = pygame.Rect(pad_x, pad_y, pad_width, pad_height)
 		pygame.draw.rect(screen, RED, paddle)
 		
 		# Show current position of the ball and paddle
-		#print "X: %d Y: %d   GAME STATUS: %s" % (ball_x, ball_y, game_status)
+		#print "X: %d Y: %d PAD LEFT: %d PAD RIGHT: %d GAME STATUS: %s" % (ball_x, ball_y, pad_left, pad_right, game_status)
 		
 		# Limit updates to 120 frames per second
 		clock.tick(120)
