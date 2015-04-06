@@ -43,12 +43,12 @@ def generate_colors():
 def CreateBricks():
 	y_ofs = 35
 	bricks = []
-	for i in range(2):
+	for i in range(7):
 		x_ofs = 5
-		for j in range(3):
-			bricks.append([x_ofs, y_ofs, 200, 80])
-			x_ofs += 200 + 1
-		y_ofs += 80 + 1
+		for j in range(10):
+			bricks.append([x_ofs, y_ofs, 70, 20])
+			x_ofs += 70 + 1
+		y_ofs += 20 + 1
 	return bricks
 
 def DrawBricks(screen, bricks, colors):
@@ -82,14 +82,14 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 		try:
 			if brick !=  None:
 				brick_left = brick[0]
-				brick_right = brick[0] + 200
+				brick_right = brick[0] + 70
 				
 				brick_top = brick[1]
-				brick_bottom = brick[1] + 80
+				brick_bottom = brick[1] + 20
 				
 				# Hit from below
-				if int(ball_top) <= brick[1] + 80 and int(ball_top) >= brick[1] + 79:
-					if ball_x >= brick_left and ball_x <= brick_right:
+				if int(ball_top) <= brick[1] + 20 and int(ball_top) >= brick[1] + 19:
+					if ball_x >= brick_left and ball_x - ball_rad <= brick_right:
 						
 						ball_change_y *= -1
 						i = bricks.index(brick)
@@ -97,15 +97,15 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 				
 				# Hit from above
 				if int(ball_bottom) >= brick[1] and int(ball_bottom) <= brick[1] + 1:
-					if ball_x >= brick_left and ball_x <= brick_right:
+					if ball_x >= brick_left and ball_x + ball_rad <= brick_right + 1:
 						
 						ball_change_y *= -1
 						i = bricks.index(brick)
 						bricks[i] = None
 
 				# Hit from the right
-				if int(ball_left) <= brick[0] + 200 and int(ball_left) >= brick[0] + 199:
-					if ball_y >= brick_top and ball_y <= brick_bottom:
+				if int(ball_left) <= brick[0] + 71 and int(ball_left) >= brick[0] + 69:
+					if ball_y >= brick_top and ball_y - ball_rad <= brick_bottom + 1:
 						
 						ball_change_x *= -1
 						i = bricks.index(brick)
@@ -113,7 +113,7 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 						
 				# Hit from the left
 				if int(ball_right) >= brick[0] and int(ball_right) <= brick[0] + 1:
-					if ball_y >= brick_top and ball_y <= brick_bottom:
+					if ball_y >= brick_top and ball_y + ball_rad <= brick_bottom:
 						
 						ball_change_x *= -1
 						i = bricks.index(brick)
@@ -163,6 +163,28 @@ def RunGame():
 	bricks = CreateBricks()
 
 	show_list(bricks) # ---------------------------
+	
+	# test -------------------------------------------------------------------------------
+	bricks[0] = None
+	bricks[9] = None
+	bricks[10] = None
+	bricks[19] = None
+	bricks[20] = None
+	bricks[29] = None
+	bricks[30] = None
+	bricks[39] = None
+	bricks[40] = None
+	bricks[49] = None
+	bricks[50] = None
+	bricks[59] = None
+	bricks[60] = None
+	bricks[69] = None
+	
+	print
+	print "brick top: %d" % bricks[58][1]
+	print "brick bottom: %d" % (bricks[58][1] + 20)
+	print "brick left: %d" % bricks[58][0]
+	print "brick right: %d" % (bricks[58][0] + 70)
 	
 	
 	# --------- Main Game Loop ---------
@@ -292,14 +314,14 @@ def RunGame():
 		DrawBricks(screen, bricks, colors)
 		
 		# Draw the ball around the center point
-		pygame.draw.circle(screen, BLUE, (int(ball_x), int(ball_y)), ball_rad)
+		pygame.draw.rect(screen, BLUE, [int(ball_x)-8, int(ball_y)-8, 16, 16])
 		
 		# Draw the paddle
 		paddle = pygame.Rect(pad_x, pad_y, pad_width, pad_height)
 		pygame.draw.rect(screen, RED, paddle)
 		
 		# Show current position of the ball and paddle
-		#print "X: %d Y: %d PAD LEFT: %d PAD RIGHT: %d GAME STATUS: %s" % (ball_x, ball_y, pad_left, pad_right, game_status)
+		#print "X: %d Y: %d   GAME STATUS: %s" % (ball_x, ball_y, game_status)
 		
 		# Limit updates to 120 frames per second
 		clock.tick(120)
