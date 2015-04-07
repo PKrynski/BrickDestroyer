@@ -6,6 +6,7 @@ WHITE  = ( 255, 255, 255)
 BLACK  = (   0,   0,   0)
 BLUE   = (   0,   0, 255)
 RED    = ( 255,   0,   0)
+GREEN  = (   0, 200,   0)
 GRAY   = ( 200, 200, 200)
  
 pygame.init()
@@ -104,7 +105,7 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 						bricks[i] = None
 
 				# Hit from the right
-				if int(ball_left) <= brick[0] + 71 and int(ball_left) >= brick[0] + 68:
+				if int(ball_left) <= brick[0] + 70 and int(ball_left) >= brick[0] + 69:
 					if ball_y >= brick_top and ball_y <= brick_bottom:
 						
 						ball_change_x *= -1
@@ -112,7 +113,7 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 						bricks[i] = None
 						
 				# Hit from the left
-				if int(ball_right) >= brick[0] - 1 and int(ball_right) <= brick[0] + 2:
+				if int(ball_right) >= brick[0] and int(ball_right) <= brick[0] + 1:
 					if ball_y >= brick_top and ball_y <= brick_bottom:
 						
 						ball_change_x *= -1
@@ -124,6 +125,11 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 
 	return (bricks, ball_change_x, ball_change_y)
 
+def CheckWin(bricks):
+	for element in bricks:
+		if element != None:
+			return False
+	return True
 
 def show_list(bricks): #--------------------------------------------------
 	for brick in bricks:
@@ -163,6 +169,9 @@ def RunGame():
 	bricks = CreateBricks()
 
 	show_list(bricks) # ---------------------------
+	# test -------------------------------------------------------------------------------
+	for i in range(69):
+		bricks[i] = None
 	
 	
 	# --------- Main Game Loop ---------
@@ -283,6 +292,10 @@ def RunGame():
 
 			# Check if any bricks have been hit ----------------------------------------------------------
 			#check_hit(bricks)
+			if CheckWin(bricks) == True:
+				ShowMessage("YOU WON!", GREEN, 120, (150, 140))
+				ShowMessage("Press Enter to play again", GRAY, 36, (210, 290))
+				ShowMessage("Press Escape to quit", GRAY, 36, (240, 330))
 			
 			
 		# Remove bricks if hit
