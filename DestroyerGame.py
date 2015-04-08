@@ -8,6 +8,7 @@ BLUE   = (   0,   0, 255)
 RED    = ( 255,   0,   0)
 GREEN  = (   0, 200,   0)
 GRAY   = ( 200, 200, 200)
+D_GRAY = ( 100, 100, 100)
  
 pygame.init()
   
@@ -225,6 +226,26 @@ def RunGame():
 				ball_change_y = -1
 				game_status = "playing"
 		
+		# Game won
+		while game_status == "won":
+			
+			ShowMessage("YOU WON!", GREEN, 120, (150, 140))
+			ShowMessage("Press Enter to play again", D_GRAY, 36, (210, 290))
+			ShowMessage("Press Escape to quit", D_GRAY, 36, (240, 330))
+			
+			pygame.display.update()
+			
+			# Check if the player wants to play again
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					game_status = "quit"
+					exit = True
+				if event.type == pygame.KEYDOWN:
+					if event.key == pygame.K_ESCAPE:
+						game_status = "quit"
+						exit = True
+					if event.key == pygame.K_RETURN:
+						RunGame()
 		
 		# Lose a life and reset the game if the ball has gone past the paddle
 		ball_top = ball_y - ball_rad
@@ -293,9 +314,7 @@ def RunGame():
 			# Check if any bricks have been hit ----------------------------------------------------------
 			#check_hit(bricks)
 			if CheckWin(bricks) == True:
-				ShowMessage("YOU WON!", GREEN, 120, (150, 140))
-				ShowMessage("Press Enter to play again", GRAY, 36, (210, 290))
-				ShowMessage("Press Escape to quit", GRAY, 36, (240, 330))
+				game_status = "won"
 			
 			
 		# Remove bricks if hit
