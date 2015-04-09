@@ -170,10 +170,6 @@ def RunGame():
 	bricks = CreateBricks()
 
 	show_list(bricks) # ---------------------------
-	# test -------------------------------------------------------------------------------
-	for i in range(69):
-		bricks[i] = None
-	
 	
 	# --------- Main Game Loop ---------
 	while exit == False:
@@ -219,7 +215,12 @@ def RunGame():
 			ball_x = pad_x + pad_width/2
 			ball_y = pad_y - ball_rad
 			
-			ShowMessage("Press space to launch the ball", BLACK, 50, (100, 250))
+			if lives == 3:
+				ShowMessage("Your Mission:", BLACK, 30, (300, 225))
+				ShowMessage("Destroy all bricks!", BLACK, 70, (140, 250))
+				ShowMessage("You have 3 lives. Good luck!", BLACK, 25, (250, 340))
+			
+			ShowMessage("Press space to launch the ball", GRAY, 35, (190, 400))
 			
 			if pressed_key[pygame.K_SPACE] == True:
 				ball_change_x = 1
