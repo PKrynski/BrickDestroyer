@@ -90,7 +90,7 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 				brick_bottom = brick[1] + 20
 				
 				# Hit from below
-				if int(ball_top) <= brick[1] + 20 and int(ball_top) >= brick[1] + 19:
+				if int(ball_top) == brick[1] + 20 or int(ball_top) == brick[1] + 19:
 					if ball_x >= brick_left and ball_x <= brick_right:
 						
 						ball_change_y *= -1
@@ -98,7 +98,7 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 						bricks[i] = None
 				
 				# Hit from above
-				if int(ball_bottom) >= brick[1] and int(ball_bottom) <= brick[1] + 1:
+				if int(ball_bottom) == brick[1] or int(ball_bottom) == brick[1] + 1:
 					if ball_x >= brick_left and ball_x <= brick_right:
 						
 						ball_change_y *= -1
@@ -106,7 +106,7 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 						bricks[i] = None
 
 				# Hit from the right
-				if int(ball_left) <= brick[0] + 70 and int(ball_left) >= brick[0] + 69:
+				if int(ball_left) == brick[0] + 70 or int(ball_left) == brick[0] + 69:
 					if ball_y >= brick_top and ball_y <= brick_bottom:
 						
 						ball_change_x *= -1
@@ -114,7 +114,7 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 						bricks[i] = None
 						
 				# Hit from the left
-				if int(ball_right) >= brick[0] and int(ball_right) <= brick[0] + 1:
+				if int(ball_right) == brick[0] or int(ball_right) == brick[0] + 1:
 					if ball_y >= brick_top and ball_y <= brick_bottom:
 						
 						ball_change_x *= -1
@@ -215,12 +215,7 @@ def RunGame():
 			ball_x = pad_x + pad_width/2
 			ball_y = pad_y - ball_rad
 			
-			if lives == 3:
-				ShowMessage("Your Mission:", BLACK, 30, (300, 225))
-				ShowMessage("Destroy all bricks!", BLACK, 70, (140, 250))
-				ShowMessage("You have 3 lives. Good luck!", BLACK, 25, (250, 340))
-			
-			ShowMessage("Press space to launch the ball", GRAY, 35, (190, 400))
+			ShowMessage("Press space to launch the ball", BLACK, 50, (100, 250))
 			
 			if pressed_key[pygame.K_SPACE] == True:
 				ball_change_x = 1
