@@ -90,40 +90,36 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 				brick_bottom = brick[1] + 20
 				
 				# Hit from below
-				if int(ball_top) == brick[1] + 20 or int(ball_top) == brick[1] + 19:
+				if int(ball_top) <= brick[1] + 20 and int(ball_top) >= brick[1] + 19:
 					if ball_x >= brick_left and ball_x <= brick_right:
 						
 						ball_change_y *= -1
 						i = bricks.index(brick)
 						bricks[i] = None
-						print "hit"
 				
 				# Hit from above
-				if int(ball_bottom) == brick[1] or int(ball_bottom) == brick[1] + 1:
+				if int(ball_bottom) >= brick[1] and int(ball_bottom) <= brick[1] + 1:
 					if ball_x >= brick_left and ball_x <= brick_right:
 						
 						ball_change_y *= -1
 						i = bricks.index(brick)
 						bricks[i] = None
-						print "hit"
 
 				# Hit from the right
-				if int(ball_left) == brick[0] + 70 or int(ball_left) == brick[0] + 69:
+				if int(ball_left) <= brick[0] + 70 and int(ball_left) >= brick[0] + 69:
 					if ball_y >= brick_top and ball_y <= brick_bottom:
 						
 						ball_change_x *= -1
 						i = bricks.index(brick)
 						bricks[i] = None
-						print "hit"
 						
 				# Hit from the left
-				if int(ball_right) == brick[0] or int(ball_right) == brick[0] + 1:
+				if int(ball_right) >= brick[0] and int(ball_right) <= brick[0] + 1:
 					if ball_y >= brick_top and ball_y <= brick_bottom:
 						
 						ball_change_x *= -1
 						i = bricks.index(brick)
 						bricks[i] = None
-						print "hit"
 
 		except ValueError:
 			pass
@@ -174,6 +170,7 @@ def RunGame():
 	bricks = CreateBricks()
 
 	show_list(bricks) # ---------------------------
+
 	
 	# --------- Main Game Loop ---------
 	while exit == False:
@@ -219,7 +216,16 @@ def RunGame():
 			ball_x = pad_x + pad_width/2
 			ball_y = pad_y - ball_rad
 			
-			ShowMessage("Press space to launch the ball", BLACK, 50, (100, 250))
+			if lives == 3:
+				ShowMessage("Your Mission:", BLACK, 30, (300, 225))
+				ShowMessage("Destroy all bricks!", BLACK, 70, (140, 250))
+				ShowMessage("You have 3 lives. Good luck!", BLACK, 25, (250, 340))
+			elif lives == 2:
+				ShowMessage("Don't worry. You still have 2 lives!", BLACK, 40, (150, 300))
+			elif lives == 1:
+				ShowMessage("It's your last life, but you can still make it!", BLACK, 40, (80, 300))
+			
+			ShowMessage("Press space to launch the ball", GRAY, 35, (190, 400))
 			
 			if pressed_key[pygame.K_SPACE] == True:
 				ball_change_x = 1
@@ -229,6 +235,7 @@ def RunGame():
 		# Game won
 		while game_status == "won":
 			
+			ShowMessage("Mission Complete!", BLACK, 30, (50, 225))
 			ShowMessage("YOU WON!", GREEN, 120, (150, 140))
 			ShowMessage("Press Enter to play again", D_GRAY, 36, (210, 290))
 			ShowMessage("Press Escape to quit", D_GRAY, 36, (240, 330))
@@ -331,7 +338,7 @@ def RunGame():
 		pygame.draw.rect(screen, RED, paddle)
 		
 		# Show current position of the ball and paddle
-		print "X: %d Y: %d   GAME STATUS: %s" % (ball_x, ball_y, game_status)
+		#print "X: %d Y: %d PAD LEFT: %d PAD RIGHT: %d GAME STATUS: %s" % (ball_x, ball_y, pad_left, pad_right, game_status)
 		
 		# Limit updates to 120 frames per second
 		clock.tick(120)
