@@ -47,7 +47,12 @@ def CreateBricks():
 	bricks = []
 	for i in range(7):
 		x_ofs = 5
-		for j in range(10):
+		if i % 2 == 1:
+			x_ofs += 35
+			n = 9
+		else:
+			n = 10
+		for j in range(n):
 			bricks.append([x_ofs, y_ofs, 70, 20])
 			x_ofs += 70 + 1
 		y_ofs += 20 + 1
@@ -177,8 +182,9 @@ def RunGame():
 		for event in pygame.event.get(): # User did something
 			# print event				--> show what user did
 			if event.type == pygame.QUIT: # If user clicked close
-				exit = True # Flag that we want to exit this loop
+				exit = True # Flag that we want to exit the main loop
 	 
+		# The player has lost all lives - end the game
 		while game_status == "game over":
 			
 			screen.fill(BLACK)
@@ -235,7 +241,6 @@ def RunGame():
 		# Game won
 		while game_status == "won":
 			
-			ShowMessage("Mission Complete!", BLACK, 30, (50, 225))
 			ShowMessage("YOU WON!", GREEN, 120, (150, 140))
 			ShowMessage("Press Enter to play again", D_GRAY, 36, (210, 290))
 			ShowMessage("Press Escape to quit", D_GRAY, 36, (240, 330))
@@ -340,7 +345,7 @@ def RunGame():
 		# Show current position of the ball and paddle
 		#print "X: %d Y: %d PAD LEFT: %d PAD RIGHT: %d GAME STATUS: %s" % (ball_x, ball_y, pad_left, pad_right, game_status)
 		
-		# Limit updates to 120 frames per second
+		# Set display updates to 120 frames per second
 		clock.tick(120)
 	 
 		# Update the entire area of the display to the screen 
