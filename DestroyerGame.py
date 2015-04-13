@@ -79,11 +79,11 @@ def DrawBricks(screen, bricks, colors):
 
 def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y):
 	
-	ball_top = ball_y - ball_rad
-	ball_bottom = ball_y + ball_rad
+	ball_top = int(ball_y) - ball_rad
+	ball_bottom = int(ball_y) + ball_rad
 	
-	ball_left = ball_x - ball_rad
-	ball_right = ball_x + ball_rad
+	ball_left = int(ball_x) - ball_rad
+	ball_right = int(ball_x) + ball_rad
 	
 	for brick in bricks:
 		try:
@@ -95,7 +95,7 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 				brick_bottom = brick[1] + 20
 				
 				# Hit from below
-				if int(ball_top) <= brick[1] + 20 and int(ball_top) >= brick[1] + 19:
+				if ball_top <= brick[1] + 20 and ball_top >= brick[1] + 19:
 					if ball_x >= brick_left and ball_x <= brick_right:
 						
 						ball_change_y *= -1
@@ -103,7 +103,7 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 						bricks[i] = None
 				
 				# Hit from above
-				if int(ball_bottom) >= brick[1] and int(ball_bottom) <= brick[1] + 1:
+				if ball_bottom >= brick[1] and ball_bottom <= brick[1] + 1:
 					if ball_x >= brick_left and ball_x <= brick_right:
 						
 						ball_change_y *= -1
@@ -111,7 +111,7 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 						bricks[i] = None
 
 				# Hit from the right
-				if int(ball_left) <= brick[0] + 70 and int(ball_left) >= brick[0] + 69:
+				if ball_left <= brick[0] + 70 and ball_left >= brick[0] + 69:
 					if ball_y >= brick_top and ball_y <= brick_bottom:
 						
 						ball_change_x *= -1
@@ -119,10 +119,35 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 						bricks[i] = None
 						
 				# Hit from the left
-				if int(ball_right) >= brick[0] and int(ball_right) <= brick[0] + 1:
+				if ball_right >= brick[0] and ball_right <= brick[0] + 1:
 					if ball_y >= brick_top and ball_y <= brick_bottom:
 						
 						ball_change_x *= -1
+						i = bricks.index(brick)
+						bricks[i] = None
+				
+				# Hit at the corner
+				if ball_right >= brick_left and ball_x <= brick_left:
+					if ball_bottom >= brick_top	and ball_y <= brick_top:
+
+						ball_change_x *= -1
+						ball_change_y *= -1
+						i = bricks.index(brick)
+						bricks[i] = None
+						
+				if ball_left <= brick_right and ball_x >= brick_right:
+					if ball_bottom >= brick[1] and ball_y <= brick[1]:
+
+						ball_change_x *= -1
+						ball_change_y *= -1
+						i = bricks.index(brick)
+						bricks[i] = None
+						
+				if ball_right >= brick[0] and ball_x <= brick[0]:
+					if ball_bottom >= brick[1] and ball_y <= brick[1]:
+
+						ball_change_x *= -1
+						ball_change_y *= -1
 						i = bricks.index(brick)
 						bricks[i] = None
 
@@ -241,6 +266,7 @@ def RunGame():
 		# Game won
 		while game_status == "won":
 			
+			ShowMessage("Mission Complete!", BLACK, 30, (50, 225))
 			ShowMessage("YOU WON!", GREEN, 120, (150, 140))
 			ShowMessage("Press Enter to play again", D_GRAY, 36, (210, 290))
 			ShowMessage("Press Escape to quit", D_GRAY, 36, (240, 330))
