@@ -127,29 +127,14 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 						bricks[i] = None
 				
 				# Hit at the corner
-				if ball_right >= brick_left and ball_x <= brick_left:
-					if ball_bottom >= brick_top	and ball_y <= brick_top:
+				if ball_x + 4 >= brick_left and ball_x - 4 <= brick_right:
+					if ball_y + 4 >= brick_top	and ball_y - 4 <= brick_bottom:
 
 						ball_change_x *= -1
 						ball_change_y *= -1
 						i = bricks.index(brick)
 						bricks[i] = None
 						
-				if ball_left <= brick_right and ball_x >= brick_right:
-					if ball_bottom >= brick[1] and ball_y <= brick[1]:
-
-						ball_change_x *= -1
-						ball_change_y *= -1
-						i = bricks.index(brick)
-						bricks[i] = None
-						
-				if ball_right >= brick[0] and ball_x <= brick[0]:
-					if ball_bottom >= brick[1] and ball_y <= brick[1]:
-
-						ball_change_x *= -1
-						ball_change_y *= -1
-						i = bricks.index(brick)
-						bricks[i] = None
 
 		except ValueError:
 			pass
@@ -266,7 +251,6 @@ def RunGame():
 		# Game won
 		while game_status == "won":
 			
-			ShowMessage("Mission Complete!", BLACK, 30, (50, 225))
 			ShowMessage("YOU WON!", GREEN, 120, (150, 140))
 			ShowMessage("Press Enter to play again", D_GRAY, 36, (210, 290))
 			ShowMessage("Press Escape to quit", D_GRAY, 36, (240, 330))
