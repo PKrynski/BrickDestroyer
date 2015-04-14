@@ -38,6 +38,7 @@ def MovePaddle(pad_x, pad_width, key):
 
 def GenerateColors():
 	colors = []
+
 	for i in range(0, 300):
 		colors.append(randint(0, 200))
 	return colors
@@ -45,6 +46,7 @@ def GenerateColors():
 def CreateBricks():
 	y_ofs = 35
 	bricks = []
+	
 	for i in range(7):
 		x_ofs = 5
 		if i % 2 == 1:
@@ -62,6 +64,7 @@ def DrawBricks(screen, bricks, colors):
 	a = 0
 	b = 1
 	c = 2	
+	
 	for brick in bricks:
 		if brick == None:
 			colors[a] = None
@@ -127,8 +130,8 @@ def RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
 						bricks[i] = None
 				
 				# Hit at the corner
-				if ball_x + 4 >= brick_left and ball_x - 4 <= brick_right:
-					if ball_y + 4 >= brick_top	and ball_y - 4 <= brick_bottom:
+				if ball_x + ball_rad/2 >= brick_left and ball_x - ball_rad/2 <= brick_right:
+					if ball_y + ball_rad/2 >= brick_top	and ball_y - ball_rad/2 <= brick_bottom:
 
 						ball_change_x *= -1
 						ball_change_y *= -1
@@ -147,10 +150,23 @@ def CheckWin(bricks):
 			return False
 	return True
 
+def GetScore(bricks):
+	score = 0
+	
+	for element in bricks:
+		if element == None:
+			score += 15
+	
+	return score
+
+def ShowLives(lives):
+	lives_print = "Lives: " + str(lives)
+	ShowMessage(lives_print, GRAY, 28, (size[0] - 75, 0))
+
 def show_list(bricks): #--------------------------------------------------
 	for brick in bricks:
 		print brick
-
+	
 def RunGame():	
 	
 	# Run the game until the user clicks the close button
@@ -185,6 +201,8 @@ def RunGame():
 	bricks = CreateBricks()
 
 	show_list(bricks) # ---------------------------
+	#for i in range(66):
+	#	bricks[i] = None
 
 	
 	# --------- Main Game Loop ---------
@@ -193,29 +211,6 @@ def RunGame():
 			# print event				--> show what user did
 			if event.type == pygame.QUIT: # If user clicked close
 				exit = True # Flag that we want to exit the main loop
-	 
-		# The player has lost all lives - end the game
-		while game_status == "game over":
-			
-			screen.fill(BLACK)
-			
-			ShowMessage("GAME OVER", RED, 120, (120, 140))
-			ShowMessage("Press Enter to play again", GRAY, 36, (210, 290))
-			ShowMessage("Press Escape to quit", GRAY, 36, (240, 330))
-			
-			pygame.display.update()
-			
-			for event in pygame.event.get():
-				if event.type == pygame.QUIT:
-					game_status = "quit"
-					exit = True
-				if event.type == pygame.KEYDOWN:
-					if event.key == pygame.K_ESCAPE:
-						game_status = "quit"
-						exit = True
-					if event.key == pygame.K_RETURN:
-						RunGame()
-
 		
 		# Set the screen background color
 		screen.fill(WHITE)
@@ -237,7 +232,7 @@ def RunGame():
 				ShowMessage("Destroy all bricks!", BLACK, 70, (140, 250))
 				ShowMessage("You have 3 lives. Good luck!", BLACK, 25, (250, 340))
 			elif lives == 2:
-				ShowMessage("Don't worry. You still have 2 lives!", BLACK, 40, (150, 300))
+				ShowMessage("Don't worry. You still have 2 lives!", BLACK, 40, (140, 300))
 			elif lives == 1:
 				ShowMessage("It's your last life, but you can still make it!", BLACK, 40, (80, 300))
 			
@@ -247,27 +242,6 @@ def RunGame():
 				ball_change_x = 1
 				ball_change_y = -1
 				game_status = "playing"
-		
-		# Game won
-		while game_status == "won":
-			
-			ShowMessage("YOU WON!", GREEN, 120, (150, 140))
-			ShowMessage("Press Enter to play again", D_GRAY, 36, (210, 290))
-			ShowMessage("Press Escape to quit", D_GRAY, 36, (240, 330))
-			
-			pygame.display.update()
-			
-			# Check if the player wants to play again
-			for event in pygame.event.get():
-				if event.type == pygame.QUIT:
-					game_status = "quit"
-					exit = True
-				if event.type == pygame.KEYDOWN:
-					if event.key == pygame.K_ESCAPE:
-						game_status = "quit"
-						exit = True
-					if event.key == pygame.K_RETURN:
-						RunGame()
 		
 		# Lose a life and reset the game if the ball has gone past the paddle
 		ball_top = ball_y - ball_rad
@@ -304,7 +278,7 @@ def RunGame():
 
 			
 			# Bounce the ball off the paddle
-			if ball_bottom >= pad_y and ball_bottom < pad_y + 1:
+			if ball_bottom >= pad_y and ball_bottom < pad_y + 5:
 				
 				# Vary the angle depending on where the ball hit the paddle
 				
@@ -333,30 +307,82 @@ def RunGame():
 						ball_change_y = -1.22
 
 
-			# Check if any bricks have been hit ----------------------------------------------------------
-			#check_hit(bricks)
+			# Check if all the bricks have been destroyed
 			if CheckWin(bricks) == True:
 				game_status = "won"
 			
+		# Game over - The player has lost all lives
+		while game_status == "game over":
 			
-		# Remove bricks if hit
-		bricks, ball_change_x, ball_change_y = RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
+			screen.fill(BLACK)
+			
+			ShowMessage("GAME OVER", RED, 120, (120, 140))
+			ShowMessage("Press Enter to play again", GRAY, 36, (210, 290))
+			ShowMessage("Press Escape to quit", GRAY, 36, (240, 330))
+			
+			pygame.display.update()
+			
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					game_status = "quit"
+					exit = True
+				if event.type == pygame.KEYDOWN:
+					if event.key == pygame.K_ESCAPE:
+						game_status = "quit"
+						exit = True
+					if event.key == pygame.K_RETURN:
+						RunGame()	
 		
-		# Draw the bricks
-		DrawBricks(screen, bricks, colors)
+		# Game won
+		while game_status == "won":
+			
+			ShowMessage("YOU WON!", GREEN, 120, (150, 140))
+			ShowMessage("Press Enter to play again", D_GRAY, 36, (210, 290))
+			ShowMessage("Press Escape to quit", D_GRAY, 36, (240, 330))
+			
+			pygame.display.update()
+			
+			# Check if the player wants to play again
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					game_status = "quit"
+					exit = True
+				if event.type == pygame.KEYDOWN:
+					if event.key == pygame.K_ESCAPE:
+						game_status = "quit"
+						exit = True
+					if event.key == pygame.K_RETURN:
+						RunGame()
 		
-		# Draw the ball around the center point
-		pygame.draw.circle(screen, BLUE, (int(ball_x), int(ball_y)), ball_rad)
 		
-		# Draw the paddle
-		paddle = pygame.Rect(pad_x, pad_y, pad_width, pad_height)
-		pygame.draw.rect(screen, RED, paddle)
+		if game_status != "quit":
 		
-		# Show current position of the ball and paddle
-		#print "X: %d Y: %d PAD LEFT: %d PAD RIGHT: %d GAME STATUS: %s" % (ball_x, ball_y, pad_left, pad_right, game_status)
+			# Show the player his score and lives counters
+			if game_status == "ready" or game_status == "playing":
+				points = GetScore(bricks)
+				score_print = "Score: " + str(points)
+				ShowMessage(score_print, GRAY, 28, (5, 0))
+				
+				ShowLives(lives)
+			
+			# Remove bricks if hit
+			bricks, ball_change_x, ball_change_y = RemoveBricks(ball_x, ball_y, ball_rad, bricks, ball_change_x, ball_change_y)
+			
+			# Draw the bricks
+			DrawBricks(screen, bricks, colors)
+			
+			# Draw the ball around the center point
+			pygame.draw.circle(screen, BLUE, (int(ball_x), int(ball_y)), ball_rad)
+			
+			# Draw the paddle
+			paddle = pygame.Rect(pad_x, pad_y, pad_width, pad_height)
+			pygame.draw.rect(screen, RED, paddle)
+			
+			# Show current position of the ball
+			#print "X: %d Y: %d GAME STATUS: %s" % (ball_x, ball_y, game_status)
 		
-		# Set display updates to 120 frames per second
-		clock.tick(120)
+		# Set display updates to 180 frames per second
+		clock.tick(180)
 	 
 		# Update the entire area of the display to the screen 
 		pygame.display.update()
