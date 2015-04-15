@@ -6,6 +6,7 @@ WHITE  = ( 255, 255, 255)
 BLACK  = (   0,   0,   0)
 BLUE   = (   0,   0, 255)
 RED    = ( 255,   0,   0)
+D_RED  = ( 150,   0,   0)
 GREEN  = (   0, 200,   0)
 GRAY   = ( 200, 200, 200)
 D_GRAY = ( 100, 100, 100)
@@ -41,6 +42,7 @@ def GenerateColors():
 
 	for i in range(0, 300):
 		colors.append(randint(0, 200))
+
 	return colors
 
 def CreateBricks():
@@ -58,6 +60,7 @@ def CreateBricks():
 			bricks.append([x_ofs, y_ofs, 70, 20])
 			x_ofs += 70 + 1
 		y_ofs += 20 + 1
+
 	return bricks
 
 def DrawBricks(screen, bricks, colors):
@@ -163,7 +166,7 @@ def ShowLives(lives):
 	lives_print = "Lives: " + str(lives)
 	ShowMessage(lives_print, GRAY, 28, (size[0] - 75, 0))
 
-def show_list(bricks): #--------------------------------------------------
+def show_list(bricks): #-----------------------
 	for brick in bricks:
 		print brick
 	
@@ -205,10 +208,12 @@ def RunGame():
 	#	bricks[i] = None
 
 	
-	# --------- Main Game Loop ---------
+	# Main Game Loop
 	while exit == False:
-		for event in pygame.event.get(): # User did something
-			# print event				--> show what user did
+		
+		# Check if the user wants to close the game
+		for event in pygame.event.get():
+			# print event				--> show all events
 			if event.type == pygame.QUIT: # If user clicked close
 				exit = True # Flag that we want to exit the main loop
 		
@@ -223,6 +228,7 @@ def RunGame():
 		
 		# Ready to play
 		if game_status == "ready":
+			
 			# Ball starting position
 			ball_x = pad_x + pad_width/2
 			ball_y = pad_y - ball_rad
@@ -310,15 +316,17 @@ def RunGame():
 			# Check if all the bricks have been destroyed
 			if CheckWin(bricks) == True:
 				game_status = "won"
-			
+		
+		
 		# Game over - The player has lost all lives
 		while game_status == "game over":
 			
 			screen.fill(BLACK)
 			
-			ShowMessage("GAME OVER", RED, 120, (120, 140))
-			ShowMessage("Press Enter to play again", GRAY, 36, (210, 290))
-			ShowMessage("Press Escape to quit", GRAY, 36, (240, 330))
+			ShowMessage("GAME OVER", RED, 120, (125, 140))
+			ShowMessage("Your Score: " + str(points), D_RED, 30, (285, 290))
+			ShowMessage("Press Enter to play again", GRAY, 36, (215, 340))
+			ShowMessage("Press Escape to quit", GRAY, 36, (245, 380))
 			
 			pygame.display.update()
 			
