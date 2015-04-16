@@ -166,7 +166,7 @@ def ShowLives(lives):
 	lives_print = "Lives: " + str(lives)
 	ShowMessage(lives_print, GRAY, 28, (size[0] - 75, 0))
 
-def show_list(bricks): #-----------------------
+def show_list(bricks): #---------------------------------
 	for brick in bricks:
 		print brick
 	
@@ -228,7 +228,6 @@ def RunGame():
 		
 		# Ready to play
 		if game_status == "ready":
-			
 			# Ball starting position
 			ball_x = pad_x + pad_width/2
 			ball_y = pad_y - ball_rad
@@ -316,8 +315,7 @@ def RunGame():
 			# Check if all the bricks have been destroyed
 			if CheckWin(bricks) == True:
 				game_status = "won"
-		
-		
+			
 		# Game over - The player has lost all lives
 		while game_status == "game over":
 			
@@ -389,8 +387,8 @@ def RunGame():
 			# Show current position of the ball
 			#print "X: %d Y: %d GAME STATUS: %s" % (ball_x, ball_y, game_status)
 		
-		# Set display updates to 180 frames per second
-		clock.tick(180)
+		# Set display updates to 240 frames per second
+		clock.tick(240)
 	 
 		# Update the entire area of the display to the screen 
 		pygame.display.update()
