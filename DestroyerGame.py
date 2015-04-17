@@ -166,10 +166,7 @@ def ShowLives(lives):
 	lives_print = "Lives: " + str(lives)
 	ShowMessage(lives_print, GRAY, 28, (size[0] - 75, 0))
 
-def show_list(bricks): #---------------------------------
-	for brick in bricks:
-		print brick
-	
+
 def RunGame():	
 	
 	# Run the game until the user clicks the close button
@@ -203,18 +200,13 @@ def RunGame():
 	# Create bricks
 	bricks = CreateBricks()
 
-	show_list(bricks) # ---------------------------
-	#for i in range(66):
-	#	bricks[i] = None
-
 	
 	# Main Game Loop
 	while exit == False:
 		
 		# Check if the user wants to close the game
 		for event in pygame.event.get():
-			# print event				--> show all events
-			if event.type == pygame.QUIT: # If user clicked close
+			if event.type == pygame.QUIT: # If player clicked close
 				exit = True # Flag that we want to exit the main loop
 		
 		# Set the screen background color
@@ -383,9 +375,7 @@ def RunGame():
 			# Draw the paddle
 			paddle = pygame.Rect(pad_x, pad_y, pad_width, pad_height)
 			pygame.draw.rect(screen, RED, paddle)
-			
-			# Show current position of the ball
-			#print "X: %d Y: %d GAME STATUS: %s" % (ball_x, ball_y, game_status)
+
 		
 		# Set display updates to 240 frames per second
 		clock.tick(240)
